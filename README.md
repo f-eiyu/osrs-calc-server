@@ -45,12 +45,14 @@ A damage calculator for Old School RuneScape (OSRS). There are a handful of exis
 ## ERDs
 Still struggling with the whole "unpacking all our stuff after moving" thing, but again, the ERD is not intended to be the complicated part here.
 
+```
 user ─∈ loadout ─∈ items
 
-&nbsp;&#124;  
+|
 M
 
 character
+```
 
 ## Seed Data
 Seed data will be fetched from the [OSRS Wiki](https://oldschool.runescape.wiki/) and cached locally. The wiki does not have an external API, but data can be fetched using function calls in various Lua scripts, such as [this one](https://oldschool.runescape.wiki/w/Module:Slottable). I will be fetching the appropriate data via said Lua scripts and saving it on the server side, to function as seed data.

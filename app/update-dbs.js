@@ -3,6 +3,14 @@ const Npc = require("./models/npc");
 const Item = require("./models/item");
 const parsedData = require("./data/parse-all");
 
+const mongoose = require("mongoose");
+const db = require("../config/db");
+
+
+// connect to Mongoose
+mongoose.connect(db, {
+	useNewUrlParser: true,
+})
 
 // seed item and npc databases
 const seed = async () => {
@@ -24,4 +32,4 @@ const seed = async () => {
   console.log("Database refreshed!");
 }
 
-module.exports = seed;
+seed().then(() => mongoose.connection.close());

@@ -2,14 +2,13 @@
 const fs = require("fs");
 const path = require("path");
 
-
 // parse npc data dump, discarding some properties that are not helpful to us
 // and processing the data to fit the Npc model.
 const npcsParsed = [];
-const npcIds = fs.readdirSync("./npcs").filter(f => path.extname(f) === ".json");
+const npcIds = fs.readdirSync(path.join(__dirname, "./npcs")).filter(f => path.extname(f) === ".json");
 
 npcIds.forEach(f => {
-  const npcData = fs.readFileSync(path.join("./npcs", f));
+  const npcData = fs.readFileSync(path.join(__dirname, "/npcs", f));
   const npc = JSON.parse(npcData.toString());
 
   npc._id = npc.id;
@@ -33,10 +32,10 @@ npcIds.forEach(f => {
 // account for that as well. as before, we'll discard the propertie we don't
 // need and process the data to fit the Item model.
 const itemsParsed = {};
-const itemFiles = fs.readdirSync("./eq").filter(f => path.extname(f) === ".json");
+const itemFiles = fs.readdirSync(path.join(__dirname, "/eq")).filter(f => path.extname(f) === ".json");
 
 itemFiles.forEach(f => {
-  const slotData = fs.readFileSync(path.join("./eq", f));
+  const slotData = fs.readFileSync(path.join(__dirname, "/eq", f));
   // trim first six characters "items-" and last five characters ".json"
   const slotName = f.slice(6, -5);
   const slotItems = [];

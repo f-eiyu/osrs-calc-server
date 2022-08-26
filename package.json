@@ -1,0 +1,24 @@
+{
+  "name": "osrs-calc-server",
+  "version": "0.0.1",
+  "description": "Back end for OSRS DPS calculator",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Fei Yu",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "method-override": "^3.0.0",
+    "mongodb": "^4.2.1",
+    "mongoose": "^6.1.1",
+    "passport": "^0.6.0",
+    "passport-http-bearer": "^1.0.1"
+  }
+}

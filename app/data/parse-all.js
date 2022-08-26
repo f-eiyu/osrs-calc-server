@@ -11,9 +11,13 @@ npcIds.forEach(f => {
   const npcData = fs.readFileSync(path.join(__dirname, "/npcs", f));
   const npc = JSON.parse(npcData.toString());
 
+  if (!npc.hitpoints) { return; }
+
   npc._id = npc.id;
   delete npc.id;
 
+  delete npc.max_hit;
+  delete npc.attack_speed;
   delete npc.release_date;
   delete npc.wiki_name;
   delete npc.wiki_url;

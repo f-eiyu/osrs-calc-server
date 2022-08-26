@@ -100,42 +100,32 @@ const itemSchema = new mongoose.Schema({
     },
     slot: {
       type: String,
-      required: true
+      required: true,
+      index: true
     }
   },
   weapon: {
     attack_speed: {
-      type: Number,
-      required: true
+      type: Number
     },
     weapon_type: {
-      type: String,
-      required: true
+      type: String
     },
     stances: [{
       combat_style: {
-        type: String,
-        required: true
+        type: String
       },
       attack_type: {
-        type: String,
-        required: true,
-        default: ""
+        type: String
       },
       attack_style: {
-        type: String,
-        required: true,
-        default: ""
+        type: String
       },
       experience: {
-        type: String,
-        required: true,
-        default: ""
+        type: String
       },
       boosts: {
-        type: String,
-        required: true,
-        default: ""
+        type: String
       }  
     }]
   },

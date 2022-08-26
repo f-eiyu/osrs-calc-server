@@ -35,11 +35,6 @@ const npcSchema = new mongoose.Schema({
     required: true,
     default: 0
   },
-  max_hit: {
-    type: Number,
-    required: true,
-    default: 0
-  },
   attack_type: [{
     type: String
   }],

@@ -24,10 +24,7 @@ const seed = async () => {
   const { npcsParsed, itemsParsed } = parsedData;
   
   await Npc.create(npcsParsed);
-  for (const slotName of Object.keys(itemsParsed)) {
-    const slotItems = itemsParsed[slotName];
-    await Item.create(slotItems);
-  }
+  await Item.create(itemsParsed);
 
   console.log("Database refreshed!");
 }

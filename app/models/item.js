@@ -5,7 +5,8 @@ const mongoose = require("mongoose");
 const itemSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    trim: true
   },
   last_updated: {
     type: String,
@@ -20,10 +21,6 @@ const itemSchema = new mongoose.Schema({
     required: true
   },
   placeholder: {
-    type: Boolean,
-    required: true
-  },
-  duplicate: {
     type: Boolean,
     required: true
   },

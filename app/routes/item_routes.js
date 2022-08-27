@@ -31,11 +31,31 @@ const router = express.Router()
 
 // INDEX -- retrieve all items on app load
 router.get("/items", (req, res, next) => {
-  Item.find()
+  Item.find().sort({"name": 1})
     .then(items => {
-      return items.map(item => item.toObject());
+      // categorize the items by slot
+      const itemsBySlot = {};
+
+      for (const item of items) {
+        const slot = item.equipment.slot;
+        if (itemsBySlot[slot]) { itemsBySlot[slot][item.name] = item; }
+        else { itemsBySlot[slot] = {[item.name]: item}; }
+      }
+
+      // there's no practical difference between a "weapon" and a "2h" for the
+      // purposes of the calculator, and indeed, it doesn't make sense to have
+      // a separate "2h" slot, so these categories can be merged into just the
+      // "weapon" category
+      itemsBySlot["weapon"] = {
+        ...itemsBySlot["weapon"],
+        ...itemsBySlot["2h"]
+      };
+      delete itemsBySlot["2h"];
+
+      // return the categorized items
+      return itemsBySlot;
     })
-    .then(items => {
+    .then(items => { // send the categorized items to the client
       res.status(200).json(items);
     })
     .catch(next);

@@ -31,6 +31,56 @@ const router = express.Router()
 
 // INDEX -- retrieve all items on app load
 router.get("/items", (req, res, next) => {
+  const itemNone = {
+    "None": {
+      "equipment": {
+        attack_crush: 0,
+        attack_magic: 0,
+        attack_ranged: 0,
+        attack_slash: 0,
+        attack_stab: 0,
+        defence_crush: 0,
+        defence_magic: 0,
+        defence_ranged: 0,
+        defence_slash: 0,
+        defence_stab: 0,
+        magic_damage: 0,
+        melee_strength: 0,
+        prayer: 0,
+        ranged_strength: 0,
+        slot: "ammo",
+      },
+      incomplete: false,
+      last_updated: "",
+      members: false,
+      name: "None",
+      placeholder: false,
+      weapon: { stances: [] },
+      _id: -1
+    }
+  };
+
+  const unarmedStances = [
+    {
+      combat_style: "punch",
+      attack_type: "crush",
+      attack_style: "accurate",
+      experience: "attack"
+    },
+    {
+      combat_style: "kick",
+      attack_type: "crush",
+      attack_style: "aggressive",
+      experience: "strength"
+    },
+    {
+      combat_style: "block",
+      attack_type: "crush",
+      attack_style: "defensive",
+      experience: "defence"
+    }
+  ];
+
   Item.find().sort({"name": 1})
     .then(items => {
       // categorize the items by slot
@@ -39,7 +89,7 @@ router.get("/items", (req, res, next) => {
       for (const item of items) {
         const slot = item.equipment.slot;
         if (itemsBySlot[slot]) { itemsBySlot[slot][item.name] = item; }
-        else { itemsBySlot[slot] = {[item.name]: item}; }
+        else { itemsBySlot[slot] = { ...itemNone, [item.name]: item}; }
       }
 
       // there's no practical difference between a "weapon" and a "2h" for the
@@ -51,6 +101,9 @@ router.get("/items", (req, res, next) => {
         ...itemsBySlot["2h"]
       };
       delete itemsBySlot["2h"];
+
+      // special case -- unarmed attacks also have attack styles
+      itemsBySlot.weapon.None.weapon.stances = unarmedStances;
 
       // return the categorized items
       return itemsBySlot;

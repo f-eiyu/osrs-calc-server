@@ -120,10 +120,7 @@ const itemSchema = new mongoose.Schema({
       },
       experience: {
         type: String
-      },
-      boosts: {
-        type: String
-      }  
+      }
     }]
   },
 

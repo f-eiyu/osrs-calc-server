@@ -16,6 +16,7 @@ const BadParamsError = errors.BadParamsError
 const BadCredentialsError = errors.BadCredentialsError
 
 const User = require('../models/user')
+const Loadout = require("../models/loadout");
 
 // passing this as a second argument to `router.<verb>` will make it
 // so that a token MUST be passed for that route to be available
@@ -25,11 +26,11 @@ const requireToken = passport.authenticate('bearer', { session: false })
 // instantiate a router (mini app that only handles routes)
 const router = express.Router()
 
-
-router.get("/check-username/:username", (req, res, next) => {
+router.get("/check-username/:username", async (req, res, next) => {
 	const { username } = req.params;
 	User.findOne({username: username})
 		.then(user => {
+			console.log(user)
 			if (!user) { res.status(201).json({ unique: true }); }
 			else { res.status(201).json({ unique: false}); }
 		})
@@ -103,8 +104,19 @@ router.post('/sign-in', (req, res, next) => {
 			}
 		})
 		.then((user) => {
-			// return status 201, the username, and the new token
-			res.status(201).json({ user: user.toObject() })
+			const userObj = user.toObject();
+
+			// retrieve the user's loadouts as well
+			Loadout.find({owner: userObj._id})
+				.then(foundLoadouts => {
+					const loadoutsObj = {};
+					foundLoadouts.forEach(loadout => {
+						loadoutsObj[loadout.name] = loadout.loadout;
+					});
+					userObj.loadouts = loadoutsObj;
+					console.log(userObj);
+				})
+				.then(() => res.status(201).json({ user: userObj }));
 		})
 		.catch(next)
 })

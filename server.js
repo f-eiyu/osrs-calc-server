@@ -8,6 +8,7 @@ const npcRoutes = require("./app/routes/npc_routes");
 const itemRoutes = require("./app/routes/item_routes");
 const playerRoutes = require("./app/routes/player_routes");
 const userRoutes = require('./app/routes/user_routes')
+const loadoutRoutes = require("./app/routes/loadout_routes");
 
 // require middleware
 const errorHandler = require('./lib/error_handler')
@@ -71,6 +72,7 @@ app.use(npcRoutes);
 app.use(itemRoutes);
 app.use(playerRoutes);
 app.use(userRoutes)
+app.use(loadoutRoutes);
 
 // register error handling middleware
 // note that this comes after the route middlewares, because it needs to be

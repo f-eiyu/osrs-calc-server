@@ -16,11 +16,6 @@ const userSchema = new mongoose.Schema(
 			required: true,
 			default: false
 		},
-		loadouts: {
-			type: Array,
-			required: true,
-			default: []
-		},
 		token: String,
 	},
 	{

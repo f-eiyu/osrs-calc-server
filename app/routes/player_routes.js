@@ -3,8 +3,8 @@ const express = require('express')
 // Passport docs: http://www.passportjs.org/docs/
 const passport = require('passport')
 
-// pull in Mongoose model for npcs
-const Npc = require('../models/npc')
+// const Item = require('../models/item')
+const hiscores = require("osrs-json-hiscores");
 
 // this is a collection of methods that help us detect situations when we need
 // to throw a custom error
@@ -28,17 +28,21 @@ const requireToken = passport.authenticate('bearer', { session: false })
 // instantiate a router (mini app that only handles routes)
 const router = express.Router()
 
+// INDEX -- retrieve all items on app load
+router.get("/player/:name", async (req, res, next) => {
+  let player;
 
-// INDEX -- retrieve all npcs on app load
-router.get("/npcs", (req, res, next) => {
-  Npc.find().sort({"name": 1})
-    .then(npcs => {
-      return npcs.map(npc => npc.toObject());
-    })
-    .then(npcs => {
-      res.status(200).json(npcs);
-    })
-    .catch(next);
+  try {
+    player = await hiscores.getStats(req.params.name);
+  } catch (error) {
+    res.status(200).json({failed: true});
+    return;
+  }
+  
+  const playerStats = player.main.skills;
+  playerStats.name = player.name;
+  delete playerStats.overall;
+  res.status(200).json(playerStats);
 });
 
 module.exports = router;

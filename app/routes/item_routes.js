@@ -60,26 +60,30 @@ router.get("/items", (req, res, next) => {
     }
   };
 
-  const unarmedStances = [
-    {
-      combat_style: "punch",
-      attack_type: "crush",
-      attack_style: "accurate",
-      experience: "attack"
-    },
-    {
-      combat_style: "kick",
-      attack_type: "crush",
-      attack_style: "aggressive",
-      experience: "strength"
-    },
-    {
-      combat_style: "block",
-      attack_type: "crush",
-      attack_style: "defensive",
-      experience: "defence"
-    }
-  ];
+  const unarmedWeapon = {
+    attack_speed: 4,
+    weapon_type: "crush_unarmed",
+    stances: [
+      {
+        combat_style: "punch",
+        attack_type: "crush",
+        attack_style: "accurate",
+        experience: "attack"
+      },
+      {
+        combat_style: "kick",
+        attack_type: "crush",
+        attack_style: "aggressive",
+        experience: "strength"
+      },
+      {
+        combat_style: "block",
+        attack_type: "crush",
+        attack_style: "defensive",
+        experience: "defence"
+      }
+    ]
+  };
 
   Item.find().sort({"name": 1})
     .then(items => {
@@ -103,7 +107,7 @@ router.get("/items", (req, res, next) => {
       delete itemsBySlot["2h"];
 
       // special case -- unarmed attacks also have attack styles
-      itemsBySlot.weapon.None.weapon.stances = unarmedStances;
+      itemsBySlot.weapon.None.weapon = unarmedWeapon;
 
       // return the categorized items
       return itemsBySlot;

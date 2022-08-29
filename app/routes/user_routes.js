@@ -25,6 +25,16 @@ const requireToken = passport.authenticate('bearer', { session: false })
 // instantiate a router (mini app that only handles routes)
 const router = express.Router()
 
+
+router.get("/check-username/:username", (req, res, next) => {
+	const { username } = req.params;
+	User.findOne({username: username})
+		.then(user => {
+			if (!user) { res.status(201).json({ unique: true }); }
+			else { res.status(201).json({ unique: false}); }
+		})
+});
+
 // SIGN UP
 // POST /sign-up
 router.post('/sign-up', (req, res, next) => {
@@ -46,11 +56,11 @@ router.post('/sign-up', (req, res, next) => {
 		.then((hash) => {
 			// return necessary params to create a user
 			return {
-				email: req.body.credentials.email,
+				username: req.body.credentials.username,
 				hashedPassword: hash,
 			}
 		})
-		// create user with provided email and hashed password
+		// create user with provided username and hashed password
 		.then((user) => User.create(user))
 		// send the new user object back with status 201, but `hashedPassword`
 		// won't be send because of the `transform` in the User model
@@ -65,10 +75,10 @@ router.post('/sign-in', (req, res, next) => {
 	const pw = req.body.credentials.password
 	let user
 
-	// find a user based on the email that was passed
-	User.findOne({ email: req.body.credentials.email })
+	// find a user based on the username that was passed
+	User.findOne({ username: req.body.credentials.username })
 		.then((record) => {
-			// if we didn't find a user with that email, send 401
+			// if we didn't find a user with that username, send 401
 			if (!record) {
 				throw new BadCredentialsError()
 			}
@@ -93,7 +103,7 @@ router.post('/sign-in', (req, res, next) => {
 			}
 		})
 		.then((user) => {
-			// return status 201, the email, and the new token
+			// return status 201, the username, and the new token
 			res.status(201).json({ user: user.toObject() })
 		})
 		.catch(next)

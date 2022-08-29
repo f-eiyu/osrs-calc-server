@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const userSchema = new mongoose.Schema(
 	{
-		email: {
+		username: {
 			type: String,
 			required: true,
 			unique: true,
@@ -10,6 +10,16 @@ const userSchema = new mongoose.Schema(
 		hashedPassword: {
 			type: String,
 			required: true,
+		},
+		darkmode: {
+			type: Boolean,
+			required: true,
+			default: false
+		},
+		loadouts: {
+			type: Array,
+			required: true,
+			default: []
 		},
 		token: String,
 	},

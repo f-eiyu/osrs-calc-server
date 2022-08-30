@@ -25,7 +25,22 @@ const requireToken = passport.authenticate('bearer', { session: false })
 // instantiate a router (mini app that only handles routes)
 const router = express.Router()
 
+// index
+router.get("/get-loadouts", requireToken, (req, res, next) => {
+  const userId = req.user.id;
+  
+  Loadout.find({owner: userId})
+    .then(loadouts => loadouts.map(loadout => loadout.toObject()))
+    .then(loadouts => {
+      const loadoutRes = {};
+      loadouts.forEach(loadout => loadoutRes[loadout.name] = loadout.loadout);
+      return loadoutRes;
+    })
+    .then(loadouts => res.status(200).json({ loadouts }))
+    .catch(next);
+});
 
+// create and update, merged into one for this specific use case
 router.post("/add-loadout", requireToken, async (req, res, next) => {
 	const userId = req.user.id;
 	const { loadoutName, loadout } = req.body.loadoutEntry;
@@ -47,6 +62,11 @@ router.post("/add-loadout", requireToken, async (req, res, next) => {
   });
 
 	res.status(201).json({ newLoadouts });
+});
+
+// delete
+router.delete("/delete-loadout/:name", requireToken, (req, res, next) => {
+
 });
 
 module.exports = router;

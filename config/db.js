@@ -1,12 +1,11 @@
 'use strict'
 
 // creating a base name for the mongodb
-// REPLACE THE STRING WITH YOUR OWN DATABASE NAME
 const mongooseBaseName = 'osrs-calc-server'
 
 // create the mongodb uri for development and test
 const database = {
-	development: `mongodb://localhost/${mongooseBaseName}-development`,
+	development: "mongodb+srv://irinya:x9T38PWfYeZlDQiY@osrs-calc-db.8vjrode.mongodb.net/?retryWrites=true&w=majority",
 	test: `mongodb://localhost/${mongooseBaseName}-test`,
 }
 

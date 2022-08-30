@@ -66,7 +66,13 @@ router.post("/add-loadout", requireToken, async (req, res, next) => {
 
 // delete
 router.delete("/delete-loadout/:name", requireToken, (req, res, next) => {
+  const userId = req.user.id;
+  const loadoutName = req.params.name;
 
+  Loadout.deleteOne({owner: userId, name: loadoutName})
+    .then(console.log)
+    .then(() => res.sendStatus(204))
+    .catch(next);
 });
 
 module.exports = router;
